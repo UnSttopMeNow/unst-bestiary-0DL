@@ -1,0 +1,60 @@
+{
+  "id": "unst-bestiary-of-the-odyssey-dragon-lords",
+  "title": "Бестиарий Одиссея Повелителей Драконов Free",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "UnSttopMeNow",
+      "url": "https://boosty.to/unsttopmenow",
+      "flags": {}
+    }
+  ],
+  "flags": {
+    "canUpload": true
+  },
+  "packs": [
+    {
+      "name": "unst-ODL-Bestiary-jurnal",
+      "label": "Бестиарий OLD журнал",
+      "path": "packs/unst-ODL-Bestiary-jurnal",
+      "type": "JournalEntry",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "unst-ODL-Bestiary-actors",
+      "label": "Бестиарий OLD",
+      "path": "packs/unst-ODL-Bestiary-actors",
+      "type": "Actor",
+      "system": "dnd5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {}
+      }
+    ],
+    "recommends": [
+      {
+        "id": "fifthpendium",
+        "type": "module",
+        "compatibility": {}
+      }
+    ]
+  },
+  "description": ""
+}
