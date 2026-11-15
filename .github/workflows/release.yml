@@ -15,12 +15,10 @@ jobs:
 
       - name: Get version and update module.json
         run: |
-          # Получаем номер версии из тега (например, из v1.0.2 получаем 1.0.2)
           TAG=${GITHUB_REF#refs/tags/}
           VERSION=${TAG#v}
           REPO_URL="https://github.com/${{ github.repository }}"
           
-          # Обновляем module.json с помощью встроенной утилиты jq
           jq --arg version "$VERSION" \
              --arg url "$REPO_URL" \
              --arg manifest "$REPO_URL/releases/latest/download/module.json" \
