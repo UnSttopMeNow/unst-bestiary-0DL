@@ -13,19 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Substitute manifest and download URLs
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: 'module.json'
-        env:
-          version: ${{ steps.get_version.outputs.VERSION }}
-          url: https://github.com/${{ github.repository }}
-          manifest: https://github.com/${{ github.repository }}/releases/latest/download/module.json
-          download: https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip
+      - name: Get version and update module.json
+        run: |
+          # Получаем номер версии из тега (например, из v1.0.1 получаем 1.0.1)
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          REPO_URL="https://github.com/${{ github.repository }}"
+          
+          # Обновляем module.json с помощью встроенной утилиты jq
+          jq --arg version "$VERSION" \
+             --arg url "$REPO_URL" \
+             --arg manifest "$REPO_URL/releases/latest/download/module.json" \
+             --arg download "$REPO_URL/releases/download/$TAG/module.zip" \
+             '.version = $version | .url = $url | .manifest = $manifest | .download = $download' \
+             module.json > module_temp.json && mv module_temp.json module.json
 
       - name: Create module.zip
         run: |
@@ -34,9 +35,12 @@ jobs:
             -x ".github/*" \
             -x "*.zip"
 
-      - name: Update Release with Files
-        uses: ncipollo/release-action@v1
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
         with:
-          allowUpdates: true
-          artifacts: "./module.json, ./module.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            module.json
+            module.zip
+          tag_name: ${{ github.event.release.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
