@@ -56,7 +56,7 @@
       }
     ]
   },
-  "description": "<p>Список Бестиария из Одессеи Повелитедей Драконов</p>"
+  "description": "<p>Список Бестиария из Одессеи Повелитедей Драконов</p>",
   "url": "https://github.com/UnSttopMeNow/unst-bestiary-of-the-odyssey-dragon-lords",
   "manifest": "https://github.com/UnSttopMeNow/unst-bestiary-of-the-odyssey-dragon-lords/releases/latest/download/module.json",
   "download": "https://github.com/UnSttopMeNow/unst-bestiary-of-the-odyssey-dragon-lords/releases/download/v1.0.0/module.zip"
