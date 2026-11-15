@@ -17,15 +17,14 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Substitute manifest and download URLs
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: 'module.json'
-        env:
-          version: ${{ steps.get_version.outputs.VERSION }}
-          url: https://github.com/${{ github.repository }}
-          manifest: https://github.com/${{ github.repository }}/releases/latest/download/module.json
-          download: https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip
+      - name: Update manifest with jq
+        run: |
+          jq --arg version "${{ steps.get_version.outputs.VERSION }}" \
+             --arg url "https://github.com/${{ github.repository }}" \
+             --arg manifest "https://github.com/${{ github.repository }}/releases/latest/download/module.json" \
+             --arg download "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip" \
+             '.version = $version | .url = $url | .manifest = $manifest | .download = $download' \
+             module.json > module_temp.json && mv module_temp.json module.json
 
       - name: Create module.zip
         run: |
@@ -38,5 +37,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: "./module.json, ./module.zip"
+          artifacts: "module.json,module.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
